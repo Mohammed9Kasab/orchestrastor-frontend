@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
     this.checkRoles();
   }
   private createTitle(routesCollection: Breadcrumb[]) {
-    const title = "Travel To Desk";
+    const title = "Orchestrator";
     const titles = routesCollection.filter((route) => route.displayName);
 
     if (!titles.length) { return title; }
