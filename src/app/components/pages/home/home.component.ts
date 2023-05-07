@@ -1,7 +1,4 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {HomeService} from "./home.service";
-import {Account} from "../../../authentication/account.model";
-import {AccountService} from "../../../authentication/service/account.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ITask, Task} from "../../../core/models/task.model";
 import {IJob, Job} from "../../../core/models/job.model";
@@ -22,6 +19,8 @@ import {
   ApexFill,
   ApexLegend
 } from "ng-apexcharts";
+import {AccountService} from "../../../authentication/service/account.service";
+import {Account} from "../../../authentication/account.model";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries | undefined;
@@ -30,6 +29,7 @@ export type ChartOptions = {
   legend: ApexLegend | undefined;
   xaxis: ApexXAxis | undefined;
   plotOptions: ApexPlotOptions | undefined;
+
 };
 @Component({
   selector: 'app-home',
@@ -67,9 +67,11 @@ export class HomeComponent implements OnInit {
   unique = false;
   job: IJob | null | undefined
   isDataSent = false
+  currentAccount!: Account | null;
+
 
   constructor(private modalService: NgbModal, private taskService: TaskService, private workerService: WorkerService,
-              private jobService: JobService) {
+              private jobService: JobService,private accountService: AccountService) {
   }
 
   ngOnInit(): void {
@@ -211,18 +213,23 @@ export class HomeComponent implements OnInit {
       total_worker: new FormControl('', [Validators.required]),
       total_jobs: new FormControl('', [Validators.required]),
     });
-    this.workerService.query().subscribe(data => {
+      this.accountService.identity().subscribe(account => {
+        this.currentAccount = account
+    this.workerService.findWorkersByUserId(account?.id).subscribe(data => {
       this.workers = data.body
 
     })
-    this.jobService.query().subscribe(data => {
+    this.jobService.findJobsByUserId(account?.id).subscribe(data => {
       this.jobs = data.body
     })
-    this.taskService.query().subscribe(data => {
+    this.taskService.findTasksByUserId(account?.id).subscribe(data => {
       this.tasks = data.body
     })
+      });
+
 
   }
+
 
   openJobModal(job: IJob | null) {
     this.jobModalRef = this.modalService.open(this.AddJobModal, {
@@ -309,9 +316,12 @@ export class HomeComponent implements OnInit {
     return {
       ...new Task(),
       id: this.addTask?.get(['task_id'])!.value,
-      worker: this.addTask?.get(['task_worker'])!.value,
+      worker: {
+        id:this.addTask?.get(['task_worker'])!.value,
+      },
       job: this.job,
       duration: this.addTask?.get(['task_duration'])!.value,
+      user: this.currentAccount,
     };
   }
 
@@ -339,7 +349,7 @@ export class HomeComponent implements OnInit {
       this.success = false;
       this.modalService.dismissAll()
       this.addTask?.reset()
-      this.taskService.query().subscribe(data => {
+      this.taskService.findTasksByUserId(this.currentAccount?.id).subscribe(data => {
         this.tasks = data.body
       })
     }, 2500)
@@ -351,7 +361,7 @@ export class HomeComponent implements OnInit {
       this.successUpdate = false;
       this.modalService.dismissAll()
       this.addTask?.reset()
-      this.taskService.query().subscribe(data => {
+      this.taskService.findTasksByUserId(this.currentAccount?.id).subscribe(data => {
         this.tasks = data.body
       })
     }, 2500)
@@ -366,13 +376,13 @@ export class HomeComponent implements OnInit {
 
   saveWorker(): void {
     this.isSaving = true;
-    const worker = this.createFromFormWorker();
+      const worker = this.createFromFormWorker();
 
-    if (worker.id !== null) {
-      this.subscribeToSaveWorkerResponse(this.workerService.update(worker), 'update');
-    } else {
-      this.subscribeToSaveWorkerResponse(this.workerService.create(worker), 'create');
-    }
+      if (worker.id !== null) {
+        this.subscribeToSaveWorkerResponse(this.workerService.update(worker), 'update');
+      } else {
+        this.subscribeToSaveWorkerResponse(this.workerService.create(worker), 'create');
+      }
   }
 
   protected createFromFormWorker(): IWorker {
@@ -380,7 +390,7 @@ export class HomeComponent implements OnInit {
       ...new Worker(),
       id: this.addWorker?.get(['worker_id'])?.value,
       name: this.addWorker?.get(['worker_name'])?.value,
-
+      user: this.currentAccount,
     };
   }
 
@@ -404,7 +414,7 @@ export class HomeComponent implements OnInit {
       this.success = false;
       this.modalService.dismissAll()
       this.addWorker?.reset()
-      this.workerService.query().subscribe(data => {
+      this.workerService.findWorkersByUserId(this.currentAccount?.id).subscribe(data => {
         this.workers = data.body
 
       })
@@ -417,7 +427,7 @@ export class HomeComponent implements OnInit {
       this.successUpdate = false;
       this.modalService.dismissAll()
       this.addWorker?.reset()
-      this.workerService.query().subscribe(data => {
+      this.workerService.findWorkersByUserId(this.currentAccount?.id).subscribe(data => {
         this.workers = data.body
 
       })
@@ -445,7 +455,7 @@ export class HomeComponent implements OnInit {
       ...new Job(),
       id: this.addJob?.get(['job_id'])?.value,
       name: this.addJob?.get(['job_name'])?.value,
-
+      user: this.currentAccount,
     };
   }
 
@@ -469,7 +479,7 @@ export class HomeComponent implements OnInit {
       this.success = false;
       this.modalService.dismissAll()
       this.addJob?.reset()
-      this.jobService.query().subscribe(data => {
+      this.jobService.findJobsByUserId(this.currentAccount?.id).subscribe(data => {
         this.jobs = data.body
       })
     }, 2500)
@@ -481,7 +491,7 @@ export class HomeComponent implements OnInit {
       this.successUpdate = false;
       this.modalService.dismissAll()
       this.addJob?.reset()
-      this.jobService.query().subscribe(data => {
+      this.jobService.findJobsByUserId(this.currentAccount?.id).subscribe(data => {
         this.jobs = data.body
       })
     }, 2500)
@@ -496,21 +506,21 @@ export class HomeComponent implements OnInit {
 
   deleteWorker(worker: IWorker): void {
     this.workerService.delete(worker.id).subscribe()
-    this.workerService.query().subscribe(data => {
+    this.workerService.findWorkersByUserId(this.currentAccount?.id).subscribe(data => {
       this.workers = data.body
     })
   }
 
   deleteJob(job: IJob): void {
     this.jobService.delete(job.id).subscribe()
-    this.jobService.query().subscribe(data => {
+    this.jobService.findJobsByUserId(this.currentAccount?.id).subscribe(data => {
       this.jobs = data.body
     })
   }
 
   deleteTask(task: ITask): void {
     this.taskService.delete(task.id).subscribe()
-    this.taskService.query().subscribe(data => {
+    this.taskService.findTasksByUserId(this.currentAccount?.id).subscribe(data => {
       this.tasks = data.body
     })
   }
@@ -534,15 +544,17 @@ export class HomeComponent implements OnInit {
   }
 
   filterTasks(job: IJob) {
+    console.log(job)
     let filteredTasks = this.tasks?.filter(task =>
-      JSON.stringify(task.job) === JSON.stringify(job)
+      JSON.stringify(task.job?.id) === JSON.stringify(job.id)
     )
+    console.log(filteredTasks)
     return filteredTasks
   }
 
   sendData() {
 
-    this.jobService.getOptimizedSchedule(this.tasks).subscribe(data => {
+    this.jobService.getOptimizedSchedule(this.tasks,this.currentAccount?.id).subscribe(data => {
       console.log(data)
       // @ts-ignore
       for (let job of this.jobs) {

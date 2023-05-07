@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {getWorkerIdentifier, IWorker} from "../models/worker.model";
 import {ApplicationConfigService} from "../../config/application-config.service";
 import {createRequestOption} from "../request/request-util";
+import {ITask} from "../models/task.model";
 
 const httpOptions={
   headers:new HttpHeaders(({'Content-Type': 'application/json'}))
@@ -41,5 +42,10 @@ export class WorkerService {
 
   delete(id: number | undefined): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  findWorkersByUserId(id: number | undefined, req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IWorker[]>(`${this.resourceUrl}/users/${id}`, { params: options, observe: 'response' });
   }
 }

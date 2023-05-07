@@ -88,7 +88,7 @@
                         <tbody>
                         <tr *ngFor="let task of filterTasks(job) ;let indexOfelement=index;">
                           <td class="text-center"><b>{{task.id  }}</b></td>
-                          <td class="text-center">{{ task.worker!.name }}</td>
+                          <td class="text-center">{{task.worker?.name }}</td>
                           <td class="text-center">{{ task.duration }}</td>
                           <td class="text-center">
                             <button (click)="openTaskModal(task,job)">Edit</button>
