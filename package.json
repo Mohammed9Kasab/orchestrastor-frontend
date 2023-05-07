@@ -55,7 +55,8 @@
     "rxjs": "~6.6.0",
     "slick-carousel": "^1.8.1",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "ng-apexcharts": "^1.7.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^12.2.8",

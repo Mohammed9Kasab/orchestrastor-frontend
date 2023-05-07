@@ -1,1 +1,307 @@
-<p> home page </p>
+<div class="container">
+  <div>
+    <form [formGroup]="knowingNumberOfWorker">
+      <div class="row">
+        <div class="col-8">
+          <label><b>please let me know the number of worker or machine that participate to achieve your jobs</b></label>
+        </div>
+        <div class="col-3">
+          <input type="number" min="1" class="form-control form-control-custom" formControlName="total_worker">
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <div class="table-responsive">
+            <table *ngIf="workers !=null" class="table   mb-0 text-nowrap align-middle bg-light-white ">
+              <thead>
+              <tr>
+                <th class="text-center" scope="col">Worker ID</th>
+                <th class="text-center" scope="col">Worker Name</th>
+                <th class="text-center" scope="col">Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let worker of workers">
+                <td class="text-center">{{ worker.id }}</td>
+                <td class="text-center">{{ worker.name }}</td>
+                <td class="text-center">
+                  <button (click)="openWorkerModal(worker)">Edit</button>
+                  <a href="javascript: void(0);" class="link" (click)="deleteWorker(worker)" placement="top">
+                    delete
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <button type="button"  *ngIf="checkingNumberOfWorker()"
+                (click)="openWorkerModal(null)">Add Worker
+        </button>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-8">
+          <label><b>please let me know the number of job to be achieved </b></label>
+        </div>
+        <div class="col-3">
+          <input type="number" min="1" class="form-control form-control-custom" formControlName="total_jobs">
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <div class="table-responsive">
+            <table *ngIf="jobs !=null" class="table   mb-0 text-nowrap align-middle bg-light-white ">
+              <thead>
+              <tr>
+                <th class="text-center" scope="col">Job ID</th>
+                <th class="text-center" scope="col">Job Name</th>
+                <th class="text-center" scope="col">Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let job of jobs">
+                <td class="text-center">{{ job.id }}</td>
+                <td class="text-center">{{ job.name }}</td>
+                <td class="text-center">
+                  <button (click)="openJobModal(job)">Edit</button>
+                  <a href="javascript: void(0);" class="link" (click)="deleteJob(job)" placement="top">
+                    delete
+                  </a>
+                  <button type="button"  (click)="openTaskModal(null,job)"> Add Task
+                  </button>
+                </td>
+                <div class="modal-body">
+                  <div class="text-center">
+                    <div class="table-responsive">
+                      <table *ngIf="tasks!.length >0" class="table   mb-0 text-nowrap align-middle bg-light-white ">
+                        <thead>
+                        <tr>
+                          <th class="text-center" scope="col">Task ID</th>
+                          <th class="text-center" scope="col">Worker Name</th>
+                          <th class="text-center" scope="col">Duration(seconds)</th>
+                          <th class="text-center" scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let task of filterTasks(job) ;let indexOfelement=index;">
+                          <td class="text-center"><b>{{task.id  }}</b></td>
+                          <td class="text-center">{{ task.worker!.name }}</td>
+                          <td class="text-center">{{ task.duration }}</td>
+                          <td class="text-center">
+                            <button (click)="openTaskModal(task,job)">Edit</button>
+                            <a href="javascript: void(0);" class="link" (click)="deleteTask(task)" placement="top">
+                              delete
+                            </a>
+                          </td>
+
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <button type="button" *ngIf="!checkingNumberOfJob() && !checkingNumberOfWorker()" (click)="sendData()">send
+          Data
+        </button>
+      </div>
+      <br>
+      <br>
+
+      <div *ngIf="isDataSent" id="chart">
+        <apx-chart
+          [series]="chartOptions?.series"
+          [chart]="chartOptions?.chart"
+          [fill]="chartOptions?.fill"
+          [legend]="chartOptions?.legend"
+          [plotOptions]="chartOptions?.plotOptions"
+          [xaxis]="chartOptions?.xaxis"
+        ></apx-chart>
+      </div>
+      <div *ngIf="isDataSent" id="chartFCFS">
+        <apx-chart
+          [series]="chartFCFSOptions?.series"
+          [chart]="chartFCFSOptions?.chart"
+          [fill]="chartFCFSOptions?.fill"
+          [legend]="chartFCFSOptions?.legend"
+          [plotOptions]="chartFCFSOptions?.plotOptions"
+          [xaxis]="chartFCFSOptions?.xaxis"
+        ></apx-chart>
+      </div>
+      <div *ngIf="isDataSent" id="chartMMR">
+        <apx-chart
+          [series]="chartMMROptions?.series"
+          [chart]="chartMMROptions?.chart"
+          [fill]="chartMMROptions?.fill"
+          [legend]="chartMMROptions?.legend"
+          [plotOptions]="chartMMROptions?.plotOptions"
+          [xaxis]="chartMMROptions?.xaxis"
+        ></apx-chart>
+      </div>
+      <div class="row">
+        <button type="button"  *ngIf="checkingNumberOfJob()"
+                (click)="openJobModal(null)">Add Job
+        </button>
+      </div>
+    </form>
+  </div>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-12">
+    </div>
+  </div>
+</div>
+<ng-template #AddJobModal>
+  <div class="modal-header">
+    <h5 class="modal-title text-custom-blue" id="editUserLabel2">Add Job</h5>
+  </div>
+  <div class="modal-body">
+    <div class="text-center">
+      <form [formGroup]="addJob" (ngSubmit)="saveJob()">
+        <div class="mb-3 row">
+          <label class="col-sm-4 col-form-label">Id</label>
+          <div class="col-sm-8">
+            <input [readOnly]="true" type="text" class="form-control" formControlName="job_id" id="job_id">
+          </div>
+        </div>
+
+        <div class="mb-4 row">
+          <div class="col-4">
+            <label for="job_name" class="col-sm-4 col-form-label text-custom-blue">Name</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" min="1" class="form-control form-control-custom" formControlName="job_name"
+                   id="job_name">
+          </div>
+        </div>
+        <div>
+          <hr>
+          <div class="col-3 float-lg-left ">
+            <button type="button" class="edit-button col-sm-10 btn-first btn-submit full-width btn-height "
+                    (click)="closeJobModal()">Close
+            </button>
+          </div>
+          <div class="col-3 float-lg-right ">
+            <button type="button" id="save_job" data-cy="entityCreateSaveButton"
+                    class="edit-button col-sm-10 btn-first btn-submit full-width btn-height "
+                    (click)="saveJob()">
+              <span>Save</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+<ng-template #AddTaskModal>
+  <div class="modal-header">
+    <h5 class="modal-title text-custom-blue" id="editUserLabel">Add Task</h5>
+  </div>
+  <div class="modal-body">
+    <div class="text-center">
+      <form [formGroup]="addTask" (ngSubmit)="saveTask()">
+        <div class="mb-3 row">
+          <label class="col-sm-4 col-form-label">Id</label>
+          <div class="col-sm-8">
+            <input [readOnly]="true" type="text" class="form-control" formControlName="task_id" id="task_id">
+          </div>
+        </div>
+        <div class="mb-4 row">
+          <div class="col-4">
+            <label class="col-3 col-form-label text-custom-blue">Worker</label>
+          </div>
+          <div class="col-sm-8">
+            <select class="form-control form-control-custom " id="task_worker" name="task_worker"
+                    formControlName="task_worker">
+              <option value="" disabled selected="selected">Select</option>
+              <option
+                [ngValue]="worker.id === addTask.get('task_worker')!.value?.id ? addTask.get('task_worker')!.value : worker"
+                *ngFor="let worker of workers" [value]="worker.id">{{worker.name}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-4 row">
+          <div class="col-4">
+            <label for="task_duration" class="col-sm-4 col-form-label text-custom-blue">Duration (second)</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="number" min="1" class="form-control form-control-custom" formControlName="task_duration"
+                   id="task_duration">
+          </div>
+        </div>
+        <div>
+          <hr>
+          <div class="col-3 float-lg-left ">
+            <button type="button" class="edit-button col-sm-10 btn-first btn-submit full-width btn-height "
+                    (click)="closeTaskModal()">Close
+            </button>
+          </div>
+          <div class="col-3 float-lg-right ">
+            <button type="button" id="save-entity" data-cy="entityCreateSaveButton"
+                    class="edit-button col-sm-10 btn-first btn-submit full-width btn-height "
+                    (click)="saveTask()">
+              <span>Save</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #AddWorkerModal>
+  <div class="modal-header">
+    <h5 class="modal-title text-custom-blue" id="editUserLabel1">Add Worker</h5>
+  </div>
+  <div class="modal-body">
+    <div class="text-center">
+      <form [formGroup]="addWorker" (ngSubmit)="saveWorker()">
+        <div class="mb-3 row">
+          <label class="col-sm-4 col-form-label">Id</label>
+          <div class="col-sm-8">
+            <input [readOnly]="true" type="text" class="form-control" formControlName="worker_id" id="worker_id">
+          </div>
+        </div>
+
+        <div class="mb-4 row">
+          <div class="col-4">
+            <label for="worker_name" class="col-sm-4 col-form-label text-custom-blue">Name</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" min="1" class="form-control form-control-custom" formControlName="worker_name"
+                   id="worker_name">
+          </div>
+        </div>
+        <div>
+          <hr>
+          <div class="col-3 float-lg-left ">
+            <button type="button" class="edit-button col-sm-10 btn-first btn-submit full-width btn-height "
+                    (click)="closeWorkerModal()">Close
+            </button>
+          </div>
+          <div class="col-3 float-lg-right ">
+            <button type="button" id="save_worker" data-cy="entityCreateSaveButton"
+                    class="edit-button col-sm-10 btn-first btn-submit full-width btn-height "
+                    (click)="saveWorker()">
+              <span>Save</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+

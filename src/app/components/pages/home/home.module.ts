@@ -10,6 +10,7 @@ import { HomeComponent } from './home.component';
 import { SharedModule } from '../../shared/shared.module';
 
 import {ToastrModule} from "ngx-toastr";
+import {NgApexchartsModule} from "ng-apexcharts";
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import {ToastrModule} from "ngx-toastr";
         NiceSelectModule,
         FormsModule,
         ReactiveFormsModule,
+        NgApexchartsModule,
     ],
 
   exports: [
