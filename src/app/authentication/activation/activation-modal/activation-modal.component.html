@@ -1,0 +1,16 @@
+<div class="min-vh-100">
+  <div class="d-flex justify-content-center">
+    <div class="col-md-5">
+      <div class="alert alert-danger" *ngIf="initialized && !key">
+        <strong>The activation key is missing.</strong>
+      </div>
+
+      <div class="alert alert-success text-center" *ngIf="success">
+        <span>Your account is <strong>activated.</strong> Welcome to Travel To Desk! </span><br>
+        <span>Navigate to<a class="alert-link" routerLink="/auth/sign-in"> Sign In</a></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+

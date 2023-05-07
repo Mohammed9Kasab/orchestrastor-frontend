@@ -1,0 +1,11 @@
+<app-header [selectedNav]="selectedNav" [currentAccount]="currentAccount"></app-header>
+<div class="alert text-center cookiealert align-content-center ml-3" role="alert" *ngIf="this.cookieValue==''" >
+  <div>
+    The site uses cookies to enhance user experience. For more details see our <a class="ahref" routerLink="/privacy-policy">Privacy Policy </a>
+  </div>
+  <button type="button" class="btn btn-primary btn-sm acceptcookies" aria-label="Close" (click)="setCookie()">
+    Continue
+  </button>
+</div>
+<router-outlet (activate)="onActivate($event)"></router-outlet>
+<app-footer></app-footer>

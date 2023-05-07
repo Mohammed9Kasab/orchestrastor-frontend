@@ -1,0 +1,397 @@
+<section *ngFor="let authority of currentAccount?.authorities " class="section-padding bg-light-white listing-details ">
+  <div *ngIf="authority == 'ROLE_LOCATION_USER' " class="container">
+    <div class="row">
+      <div class="col-12 ">
+        <div class="listing-details-inner bx-wrapper bg-custom-white padding-20">
+          <div class="row">
+            <div class="col-lg-3" style="display: flex">
+              <div class="profile-pic quick-quote bx-wrapper padding-20 mb-xl-30" style="flex: 1">
+                <div class="text-center">
+                  <img  src="{{currentAccount?.imageUrl != undefined && currentAccount?.imageUrl != '' ?currentAccount?.imageUrl:'/assets/images/user.jpeg'}}" class="rounded-circle" width="150"/>
+                  <div class="text-center">
+                    <h5
+                      class="card-title mt-2 text-light-dark">{{currentAccount?.firstName}} {{currentAccount?.lastName}}</h5>
+                    <input type="file"><br>
+<!--                    <input type="file" (change)="updateProfilePicture($event)"><br>-->
+                    <small class="text-custom-blue fs-8">Picture size must not exceed 5MB</small><br/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5" style="display: flex">
+              <div class="data quick-quote bx-wrapper padding-20 mb-xl-30" style="flex: 1">
+                <div class="text-center">
+                  <h4 class=" text-custom-blue">Credentials</h4>
+                </div>
+                <form [formGroup]="editUser" (ngSubmit)="save()">
+                  <div class="col-sm-12">
+                    <label class="label fs-14 text-custom-blue fw-500">First Name</label>
+                    <input type="text" class="form-control form-control-custom" formControlName="firstName"
+                           id="firstName">
+                    <div
+                      *ngIf="editUser.get('firstName')!.invalid && (editUser.get('firstName')!.dirty || editUser.get('firstName')!.touched)">
+                      <small class="form-text text-danger" *ngIf="editUser.get('firstName')?.errors?.required">Your
+                        First
+                        Name is required.</small>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label class="label fs-14 text-custom-blue fw-500">Last Name</label>
+                    <input type="text" class="form-control form-control-custom" formControlName="lastName"
+                           id="lastName">
+                    <div
+                      *ngIf="editUser.get('lastName')!.invalid && (editUser.get('lastName')!.dirty || editUser.get('lastName')!.touched)">
+                      <small class="form-text text-danger" *ngIf="editUser.get('lastName')?.errors?.required">Your Last
+                        Name
+                        is required.</small>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label class="label fs-14 text-custom-blue fw-500">Email address </label>
+                    <input type="email" class="form-control form-control-custom" formControlName="email" id="email">
+                    <div
+                      *ngIf="editUser.get('email')!.invalid && (editUser.get('email')!.dirty || editUser.get('email')!.touched)">
+                      <small class="form-text text-danger" *ngIf="editUser.get('email')?.errors?.required">Your Email is
+                        required.</small>
+                    </div>
+                    <div *ngIf="editUser.get('email')?.errors?.email">
+                      <small class="form-text text-danger">An email type should be inserted</small>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label class="label fs-14 text-custom-blue fw-500">Phone number </label>
+                    <input type="tel" class="form-control form-control-custom" formControlName="phoneNumber" id="phoneNumber">
+                    <div *ngIf="editUser.get('phoneNumber')?.errors?.pattern">
+                      <small class="form-text text-danger">A phone number type should be inserted</small>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <label class="label fs-14 text-custom-blue fw-500">CUI</label>
+                    <input type="cui" class="form-control form-control-custom" formControlName="cui" id="cui">
+                    <div
+                      *ngIf="editUser.get('cui')!.invalid && (editUser.get('cui')!.dirty || editUser.get('cui')!.touched)">
+                      <small class="form-text text-danger" *ngIf="editUser.get('cui')?.errors?.required">Your Cui is
+                        required.</small>
+                    </div>
+                  </div>
+                  <div class="padding-20">
+                    <button type="submit"
+                            class="edit-button col-sm-10 btn-first btn-submit full-width btn-height float-right" [disabled]="editUser?.errors?.required">Save
+                      Credentials
+                    </button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+            <div class="col-lg-4" style="display: flex">
+              <div class="data quick-quote bx-wrapper padding-20 mb-xl-30" style="flex: 1">
+                <div>
+                  <div class="auth-wrapper  no-block justify-content-center align-items-center">
+                    <div>
+                      <div class="text-center">
+                        <h4 class=" text-custom-blue">Edit Password</h4>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <form class="form-horizontal mt-3" name="form" role="form" [formGroup]="passwordForm"
+                                (ngSubmit)="finishReset()">
+
+                            <div class="col-12 mb-2">
+                              <label class="label fs-14 text-custom-blue fw-500">Current Password </label>
+                              <input
+                                type="Password"
+                                class="form-control form-control-custom"
+                                id="currentPassword"
+                                name="currentPassword"
+                                formControlName="currentPassword"
+                                data-cy="currentPassword"
+                              />
+
+                              <div
+                                *ngIf="passwordForm.get('currentPassword')!.invalid &&
+                              (passwordForm.get('currentPassword')!.dirty || passwordForm.get('currentPassword')!.touched)">
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.required"
+                                >
+                                  Your Current password is required.
+                                </small>
+                              </div>
+
+                            </div>
+                            <div class="col-12 mb-2">
+                              <label class="label fs-14 text-custom-blue fw-500">New Password</label>
+                              <input
+                                type="password"
+                                class="form-control form-control-custom"
+                                id="newPassword"
+                                name="newPassword"
+                                formControlName="newPassword"
+                                data-cy="resetPassword"
+                                #newPassword
+                              />
+                              <div
+                                *ngIf="passwordForm.get('newPassword')!.invalid &&
+                              (passwordForm.get('newPassword')!.dirty || passwordForm.get('newPassword')!.touched)"
+                              >
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.required"
+                                >
+                                  Your password is required.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.minlength"
+                                >
+                                  Your password is required to be at least 4 characters.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.maxlength"
+                                >
+                                  Your password cannot be longer than 50 characters.
+                                </small>
+                              </div>
+                            </div>
+
+                            <div class="col-12 mb-2">
+                              <label class="label fs-14 text-custom-blue fw-500">New password confirmation</label>
+                              <input
+                                type="password"
+                                class="form-control form-control-custom"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                formControlName="confirmPassword"
+                                data-cy="confirmResetPassword"
+                              />
+                              <div
+                                *ngIf="passwordForm.get('confirmPassword')!.invalid &&
+                              (passwordForm.get('confirmPassword')!.dirty || passwordForm.get('confirmPassword')!.touched)">
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('confirmPassword')?.errors?.required"
+                                >
+                                  Your password confirmation is required.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('confirmPassword')?.errors?.minlength"
+                                >
+                                  Your password confirmation is required to be at least 4 characters.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('confirmPassword')?.errors?.maxlength"
+                                >
+                                  Your password confirmation cannot be longer than 50 characters.
+                                </small>
+                              </div>
+                            </div>
+
+
+                            <div class="padding-20">
+                              <button type="submit"
+                                      [disabled]="passwordForm.invalid"
+                                      class="reset-button col-sm-10 btn-first btn-submit full-width btn-height float-right">
+                                Reset password
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="authority == 'ROLE_USER' " class="container">
+    <div class="row">
+      <div class="col-12 ">
+        <div class="listing-details-inner bx-wrapper bg-custom-white padding-20">
+          <div class="row">
+            <div class="col-lg-7">
+              <div class="quick-quote bx-wrapper padding-20 mb-xl-30">
+                <div class="text-center">
+                  <img  src="{{currentAccount?.imageUrl != undefined && currentAccount?.imageUrl != '' ? currentAccount?.imageUrl : '/assets/images/user.jpeg'}}" class="rounded-circle" width="150"/>
+                  <h5
+                    class="card-title mt-2 text-light-dark">{{currentAccount?.firstName}} {{currentAccount?.lastName}}</h5>
+                  <h6 class="card-subtitle text-light-dark">Devista Consulting</h6>
+                </div>
+                <div class="credentials">
+
+                  <small class=" p-t-30 db text-custom-blue">First Name</small>
+                  <h6 class="text-light-dark">{{currentAccount?.firstName}}</h6>
+
+                  <small class=" p-t-30 db text-custom-blue">Last Name</small>
+                  <h6 class="text-light-dark">{{currentAccount?.lastName}}</h6>
+
+                  <small class=" text-custom-blue">Email address </small>
+                  <h6 class="text-light-dark">{{currentAccount?.email}}</h6>
+
+                  <small class="text-custom-blue">Upload Picture</small><br/>
+                  <input type="file" >
+<!--                  <input type="file" (change)="updateProfilePicture($event)">-->
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5" style="display: flex">
+              <div class="ata quick-quote bx-wrapper padding-20 mb-xl-30" style="flex: 1">
+                <div>
+                  <div class="auth-wrapper  no-block justify-content-center align-items-center">
+                    <div>
+                      <div class="text-center">
+                        <h4 class=" text-custom-blue">Edit Password</h4>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <form class="form-horizontal mt-3" name="form" role="form" [formGroup]="passwordForm"
+                                (ngSubmit)="finishReset()"
+                                *ngIf="!success">
+                            <div class="col-12 mb-2">
+                              <label class="label fs-14 text-custom-blue fw-500">Current Password </label>
+                              <input
+                                type="Password"
+                                class="form-control form-control-custom"
+                                id="currentPassword"
+                                name="currentPassword"
+                                formControlName="currentPassword"
+                                data-cy="currentPassword"
+                              />
+
+                              <div
+                                *ngIf="passwordForm.get('currentPassword')!.invalid &&
+                              (passwordForm.get('currentPassword')!.dirty || passwordForm.get('currentPassword')!.touched)">
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.required"
+                                >
+                                  Your Current password is required.
+                                </small>
+                              </div>
+
+                            </div>
+                            <div class="col-12 mb-2">
+                              <label class="label fs-14 text-custom-blue fw-500">New Password</label>
+                              <input
+                                type="password"
+                                class="form-control form-control-custom"
+                                id="newPassword"
+                                name="newPassword"
+                                formControlName="newPassword"
+                                data-cy="resetPassword"
+                                #newPassword
+                              />
+                              <div
+                                *ngIf="passwordForm.get('newPassword')!.invalid &&
+                              (passwordForm.get('newPassword')!.dirty || passwordForm.get('newPassword')!.touched)"
+                              >
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.required"
+                                >
+                                  Your password is required.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.minlength"
+                                >
+                                  Your password is required to be at least 4 characters.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('newPassword')?.errors?.maxlength"
+                                >
+                                  Your password cannot be longer than 50 characters.
+                                </small>
+                              </div>
+                            </div>
+
+                            <div class="col-12 mb-2">
+                              <label class="label fs-14 text-custom-blue fw-500">New password confirmation</label>
+                              <input
+                                type="password"
+                                class="form-control form-control-custom"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                formControlName="confirmPassword"
+                                data-cy="confirmResetPassword"
+                              />
+                              <div
+                                *ngIf="passwordForm.get('confirmPassword')!.invalid &&
+                              (passwordForm.get('confirmPassword')!.dirty || passwordForm.get('confirmPassword')!.touched)">
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('confirmPassword')?.errors?.required"
+                                >
+                                  Your password confirmation is required.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('confirmPassword')?.errors?.minlength"
+                                >
+                                  Your password confirmation is required to be at least 4 characters.
+                                </small>
+
+                                <small
+                                  class="form-text text-danger"
+                                  *ngIf="passwordForm.get('confirmPassword')?.errors?.maxlength"
+                                >
+                                  Your password confirmation cannot be longer than 50 characters.
+                                </small>
+                              </div>
+                            </div>
+
+
+                            <div class="padding-20">
+                              <button type="submit"
+                                      [disabled]="passwordForm.invalid"
+                                      class="reset-button col-sm-10 btn-first btn-submit full-width btn-height float-right">
+                                Reset password
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="col-12 mb-2 text-center">
+                      <label class="label fs-14 text-center text-custom-blue fw-500">Discount Code</label>
+                      <p style="font-size: 40px; font-weight: bold">{{discountCode}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+

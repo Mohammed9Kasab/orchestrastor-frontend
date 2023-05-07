@@ -1,0 +1,34 @@
+.logo{
+  height: 120px;
+  width: 100%;
+}
+
+.footer-logo-text{
+  padding-top: 20px;
+}
+
+.list{
+  list-style: none;
+  padding: 0;
+
+}
+
+.list-text{
+  padding-top: 10px;
+}
+
+.text1{
+  width: 20px;
+}
+.footer-data{
+  padding-bottom: 80px;
+}
+
+.section-padding {
+   padding: 0px ;
+  padding-top: 80px;
+}
+
+.image-fit {
+  object-fit: contain;
+}

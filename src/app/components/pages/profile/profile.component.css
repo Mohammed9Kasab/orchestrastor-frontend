@@ -1,0 +1,73 @@
+.profile{
+  padding-top: 25px;
+  padding-left: 45px;
+}
+.profile-pic{
+  padding-top: 90px;
+}
+.rounded-circle {
+  height: 200px;
+  width: 200px;
+  padding-bottom: 10px;
+}
+
+.data{
+  padding-top: 40px;
+}
+
+.label{
+  padding-top: 20px;
+}
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+
+
+.newpass-label{
+  width: 280px;
+}
+.edit-button{
+  width: 180px;
+
+}
+.edit-pass{
+  padding-left:15px;
+}
+
+.credentials-label{
+  padding-left: 15px;
+}
+
+.reset-button{
+  width: 150px;
+}
+
+.credentials{
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.reset-pass{
+  padding-right: 100px;
+}
+
+input[type=file]{
+  width:90px;
+  color:transparent;
+}
+
+input[type="file"]::file-selector-button {
+  border-color: #262b5a;
+  color: #262b5a;
+  background: #fff;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+
+}
+
+
