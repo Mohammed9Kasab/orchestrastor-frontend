@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {getTaskIdentifier, ITask} from "../models/task.model";
 import {ApplicationConfigService} from "../../config/application-config.service";
 import {createRequestOption} from "../request/request-util";
+import {IJob} from "../models/job.model";
 
 
 const httpOptions={
@@ -42,5 +43,10 @@ export class TaskService {
   }
   getByJobId(jobId: number | undefined): Observable<EntityArrayResponseType> {
     return this.http.get<ITask[]>(`${this.resourceUrl}/job/${jobId}`, {  observe: 'response' });
+  }
+
+  findTasksByUserId(id: number | undefined, req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<ITask[]>(`${this.resourceUrl}/users/${id}`, { params: options, observe: 'response' });
   }
 }

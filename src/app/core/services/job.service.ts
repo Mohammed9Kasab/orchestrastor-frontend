@@ -7,6 +7,7 @@ import {ITask} from "../models/task.model";
 import {Result} from "../models/result.model";
 import {ApplicationConfigService} from "../../config/application-config.service";
 import {createRequestOption} from "../request/request-util";
+import {IWorker} from "../models/worker.model";
 
 const httpOptions={
   headers:new HttpHeaders(({'Content-Type': 'application/json'}))
@@ -42,7 +43,12 @@ export class JobService {
   delete(id: number | undefined): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-  getOptimizedSchedule(tasks: ITask[] | null):Observable<Result> {
-    return this.http.get<Result>('job_shop')
+
+  getOptimizedSchedule(tasks: ITask[] | null, id: number | undefined):Observable<Result> {
+    return this.http.get<Result>(`${this.resourceUrl}/job_shop/${id}`)
+  }
+  findJobsByUserId(id: number | undefined, req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IJob[]>(`${this.resourceUrl}/users/${id}`, { params: options, observe: 'response' });
   }
 }
