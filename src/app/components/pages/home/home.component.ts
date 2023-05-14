@@ -38,8 +38,8 @@ export type ChartOptions = {
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild("chart") chart: ChartComponent | undefined;
-  public chartOptions: Partial<ChartOptions> | any;
+  @ViewChild("chartJSP") chartJSP: ChartComponent | undefined;
+  public chartJSPOptions: Partial<ChartOptions> | any;
   @ViewChild("chartFCFS") chartFCFS: ChartComponent | undefined;
   public chartFCFSOptions: Partial<ChartOptions> | any;
   @ViewChild("chartFCFS") chartMMR: ChartComponent | undefined;
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.chartOptions = {
+    this.chartJSPOptions = {
       series: [],
       chart: {
         height: 450,
@@ -544,11 +544,9 @@ export class HomeComponent implements OnInit {
   }
 
   filterTasks(job: IJob) {
-    console.log(job)
     let filteredTasks = this.tasks?.filter(task =>
       JSON.stringify(task.job?.id) === JSON.stringify(job.id)
     )
-    console.log(filteredTasks)
     return filteredTasks
   }
 
@@ -558,32 +556,27 @@ export class HomeComponent implements OnInit {
       console.log(data)
       // @ts-ignore
       for (let job of this.jobs) {
-        this.chartOptions.series.push({name: job.name, data: []})
+        this.chartJSPOptions.series.push({name: job.name, data: []})
         this.chartFCFSOptions.series.push({name: job.name, data: []})
         this.chartMMROptions.series.push({name: job.name, data: []})
       }
-      for (let series of this.chartOptions.series) {
-        // @ts-ignore
-        for (let worker of this.workers) {
-          series.data.push({x: worker.name, y: []})
-        }
-      }
-      let count1 = 1
-      let count2 = 1
-      for (let work of this.chartOptions.series) {
-        // @ts-ignore
-        for (let row of data.outputMap) {
-          if (count1 === count1) {
+
+      //JSP CHART
+      for (let series of this.chartJSPOptions.series) {
+        for (let row of data.jsp_Output) {
+          if (data.jsp_Output.indexOf(row) == this.chartJSPOptions.series.indexOf(series)) {
             for (let element of row) {
               // @ts-ignore
-              this.chartOptions.series[element[0]].data[data.outputMap.indexOf(row)].y = [element[2], element[3]]
+              for (let worker of this.workers) {
+                if (element[4] == worker.id) {
+                  series.data.push({x: worker.name, y: [element[2], element[3]]})
+                }
+              }
             }
           }
-          count2++
         }
-        count1++
       }
-
+      
       //FCFS CHART
       for (let series of this.chartFCFSOptions.series) {
         for (let row of data.fcfs_Output) {
@@ -617,7 +610,7 @@ export class HomeComponent implements OnInit {
 
       console.log("this.chartFCFSOptions",this.chartFCFSOptions)
       console.log("this.chartMMROptions",this.chartMMROptions)
-      console.log("this.chartOptions",this.chartOptions)
+      console.log("this.chartJSPOptions",this.chartJSPOptions)
       this.isDataSent = true
     })
 

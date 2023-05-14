@@ -8,7 +8,7 @@ export class Result {
   conflicts?: string;
   branches?: string;
   wallTime?: string;
-  outputMap?: Map<string,any[]>
+  jsp_Output?: any
   fcfs_Output: any;
   mmr_Output: any;
 

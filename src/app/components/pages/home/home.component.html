@@ -119,12 +119,12 @@
 
       <div *ngIf="isDataSent" id="chart">
         <apx-chart
-          [series]="chartOptions?.series"
-          [chart]="chartOptions?.chart"
-          [fill]="chartOptions?.fill"
-          [legend]="chartOptions?.legend"
-          [plotOptions]="chartOptions?.plotOptions"
-          [xaxis]="chartOptions?.xaxis"
+          [series]="chartJSPOptions?.series"
+          [chart]="chartJSPOptions?.chart"
+          [fill]="chartJSPOptions?.fill"
+          [legend]="chartJSPOptions?.legend"
+          [plotOptions]="chartJSPOptions?.plotOptions"
+          [xaxis]="chartJSPOptions?.xaxis"
         ></apx-chart>
       </div>
       <div *ngIf="isDataSent" id="chartFCFS">
