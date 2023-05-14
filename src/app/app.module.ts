@@ -24,7 +24,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {CookieService} from "ngx-cookie-service";
 import {NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule} from "ngx-google-analytics";
-
+import { CommonModule } from '@angular/common';
 
 const materialModules = [
   MatDatepickerModule,
@@ -43,10 +43,10 @@ const materialModules = [
 @NgModule({
   declarations: [
     AppComponent,
-
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,

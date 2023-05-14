@@ -118,34 +118,13 @@
       <br>
 
       <div *ngIf="isDataSent" id="chart">
-        <apx-chart
-          [series]="chartOptions?.series"
-          [chart]="chartOptions?.chart"
-          [fill]="chartOptions?.fill"
-          [legend]="chartOptions?.legend"
-          [plotOptions]="chartOptions?.plotOptions"
-          [xaxis]="chartOptions?.xaxis"
-        ></apx-chart>
+        <app-jsp-chart  [data]="receivedData" [workers]="workers" [jobs]="jobs" *ngIf="jobs!==null && workers !== null"></app-jsp-chart>
       </div>
       <div *ngIf="isDataSent" id="chartFCFS">
-        <apx-chart
-          [series]="chartFCFSOptions?.series"
-          [chart]="chartFCFSOptions?.chart"
-          [fill]="chartFCFSOptions?.fill"
-          [legend]="chartFCFSOptions?.legend"
-          [plotOptions]="chartFCFSOptions?.plotOptions"
-          [xaxis]="chartFCFSOptions?.xaxis"
-        ></apx-chart>
+       <app-fcfs-chart  [data]="receivedData" [workers]="workers" [jobs]="jobs" *ngIf="jobs!==null && workers !== null"></app-fcfs-chart>
       </div>
       <div *ngIf="isDataSent" id="chartMMR">
-        <apx-chart
-          [series]="chartMMROptions?.series"
-          [chart]="chartMMROptions?.chart"
-          [fill]="chartMMROptions?.fill"
-          [legend]="chartMMROptions?.legend"
-          [plotOptions]="chartMMROptions?.plotOptions"
-          [xaxis]="chartMMROptions?.xaxis"
-        ></apx-chart>
+       <app-mmr-chart [data]="receivedData" [workers]="workers" [jobs]="jobs" *ngIf="jobs!==null && workers !== null"></app-mmr-chart>
       </div>
       <div class="row">
         <button type="button"  *ngIf="checkingNumberOfJob()"

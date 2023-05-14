@@ -21,29 +21,15 @@ import {
 } from "ng-apexcharts";
 import {AccountService} from "../../../authentication/service/account.service";
 import {Account} from "../../../authentication/account.model";
+import { ChartOptions } from '../../shared/chart-options.type';
 
-export type ChartOptions = {
-  series: ApexAxisChartSeries | undefined;
-  chart: ApexChart | undefined;
-  fill: ApexFill | undefined;
-  legend: ApexLegend | undefined;
-  xaxis: ApexXAxis | undefined;
-  plotOptions: ApexPlotOptions | undefined;
 
-};
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
-  @ViewChild("chart") chart: ChartComponent | undefined;
-  public chartOptions: Partial<ChartOptions> | any;
-  @ViewChild("chartFCFS") chartFCFS: ChartComponent | undefined;
-  public chartFCFSOptions: Partial<ChartOptions> | any;
-  @ViewChild("chartFCFS") chartMMR: ChartComponent | undefined;
-  public chartMMROptions: Partial<ChartOptions> | any;
   result: any
   @ViewChild('AddJobModal', {static: false})
   AddJobModal!: TemplateRef<any>;
@@ -68,6 +54,7 @@ export class HomeComponent implements OnInit {
   job: IJob | null | undefined
   isDataSent = false
   currentAccount!: Account | null;
+  receivedData: any;
 
 
   constructor(private modalService: NgbModal, private taskService: TaskService, private workerService: WorkerService,
@@ -75,126 +62,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.chartOptions = {
-      series: [],
-      chart: {
-        height: 450,
-        type: "rangeBar"
-      },
-      plotOptions: {
-        bar: {
-          rangeBarGroupRows: true,
-          horizontal: true,
-          barHeight: "80%",
-        }
-      },
-      xaxis: {
-        type: "numeric",
-        axisBorder: {
-          show: true
-        },
-        axisTicks: {
-          show: true
-        }
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          shade: "light",
-          type: "vertical",
-          shadeIntensity: 0.25,
-          gradientToColors: undefined,
-          inverseColors: true,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [50, 0, 100, 100]
-        }
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "left"
-      }
-    };
-    this.chartFCFSOptions = {
-      series: [],
-      chart: {
-        height: 450,
-        type: "rangeBar"
-      },
-      plotOptions: {
-        bar: {
-          rangeBarGroupRows: true,
-          horizontal: true,
-          barHeight: "80%",
-        }
-      },
-      xaxis: {
-        type: "numeric",
-        axisBorder: {
-          show: true
-        },
-        axisTicks: {
-          show: true
-        }
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          shade: "light",
-          type: "vertical",
-          shadeIntensity: 0.25,
-          gradientToColors: undefined,
-          inverseColors: true,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [50, 0, 100, 100]
-        }
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "left"
-      }
-    };
-    this.chartMMROptions = {
-      series: [],
-      chart: {
-        height: 450,
-        type: "rangeBar"
-      },
-      plotOptions: {
-        bar: {
-          rangeBarGroupRows: true,
-          horizontal: true,
-          barHeight: "80%",
-        }
-      },
-      xaxis: {
-        type: "numeric",
-        axisBorder: {
-          show: true
-        },
-        axisTicks: {
-          show: true
-        }
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          shade: "light",
-          type: "vertical",
-          shadeIntensity: 0.25,
-          gradientToColors: undefined,
-          inverseColors: true,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [50, 0, 100, 100]
-        }
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "left"
-      }
-    };
+    
     this.addTask = new FormGroup({
       task_id: new FormControl(),
       task_worker: new FormControl('', [Validators.required]),
@@ -544,81 +412,17 @@ export class HomeComponent implements OnInit {
   }
 
   filterTasks(job: IJob) {
-    console.log(job)
     let filteredTasks = this.tasks?.filter(task =>
       JSON.stringify(task.job?.id) === JSON.stringify(job.id)
     )
-    console.log(filteredTasks)
     return filteredTasks
   }
 
   sendData() {
 
     this.jobService.getOptimizedSchedule(this.tasks,this.currentAccount?.id).subscribe(data => {
-      console.log(data)
-      // @ts-ignore
-      for (let job of this.jobs) {
-        this.chartOptions.series.push({name: job.name, data: []})
-        this.chartFCFSOptions.series.push({name: job.name, data: []})
-        this.chartMMROptions.series.push({name: job.name, data: []})
-      }
-      for (let series of this.chartOptions.series) {
-        // @ts-ignore
-        for (let worker of this.workers) {
-          series.data.push({x: worker.name, y: []})
-        }
-      }
-      let count1 = 1
-      let count2 = 1
-      for (let work of this.chartOptions.series) {
-        // @ts-ignore
-        for (let row of data.outputMap) {
-          if (count1 === count1) {
-            for (let element of row) {
-              // @ts-ignore
-              this.chartOptions.series[element[0]].data[data.outputMap.indexOf(row)].y = [element[2], element[3]]
-            }
-          }
-          count2++
-        }
-        count1++
-      }
-
-      //FCFS CHART
-      for (let series of this.chartFCFSOptions.series) {
-        for (let row of data.fcfs_Output) {
-          if (data.fcfs_Output.indexOf(row) == this.chartFCFSOptions.series.indexOf(series)) {
-            for (let element of row) {
-              // @ts-ignore
-              for (let worker of this.workers) {
-                if (element[4] == worker.id) {
-                  series.data.push({x: worker.name, y: [element[2], element[3]]})
-                }
-              }
-            }
-          }
-        }
-      }
-      //MMR CHART
-      for (let series of this.chartMMROptions.series) {
-        for (let row of data.mmr_Output) {
-          if (data.mmr_Output.indexOf(row) == this.chartMMROptions.series.indexOf(series)) {
-            for (let element of row) {
-              // @ts-ignore
-              for (let worker of this.workers) {
-                if (element[4] == worker.id) {
-                  series.data.push({x: worker.name, y: [element[2], element[3]]})
-                }
-              }
-            }
-          }
-        }
-      }
-
-      console.log("this.chartFCFSOptions",this.chartFCFSOptions)
-      console.log("this.chartMMROptions",this.chartMMROptions)
-      console.log("this.chartOptions",this.chartOptions)
       this.isDataSent = true
+      this.receivedData =data
     })
 
   }
