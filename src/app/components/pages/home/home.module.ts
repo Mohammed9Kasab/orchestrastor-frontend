@@ -11,11 +11,17 @@ import { SharedModule } from '../../shared/shared.module';
 
 import {ToastrModule} from "ngx-toastr";
 import {NgApexchartsModule} from "ng-apexcharts";
+import { JspChartComponent } from './models/jsp-chart/jsp-chart.component';
+import { FcfsChartComponent } from './models/fcfs-chart/fcfs-chart.component';
+import { MmrChartComponent } from './models/mmr-chart/mmr-chart.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
+    JspChartComponent,
+    FcfsChartComponent,
+    MmrChartComponent
   ],
     imports: [
         CommonModule,
@@ -30,6 +36,9 @@ import {NgApexchartsModule} from "ng-apexcharts";
     ],
 
   exports: [
+    JspChartComponent,
+    FcfsChartComponent,
+    MmrChartComponent
   ]
 })
 export class HomeModule { }
