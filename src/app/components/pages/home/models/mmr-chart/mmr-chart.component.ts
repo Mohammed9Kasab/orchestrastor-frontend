@@ -42,7 +42,7 @@ export class MmrChartComponent implements OnInit {
       }
     },
     fill: {
-      type: "gradient",
+      type: "solid",
       gradient: {
         shade: "light",
         type: "vertical",
@@ -67,8 +67,8 @@ export class MmrChartComponent implements OnInit {
 
     //MMR CHART
     for (let series of this.chartMMROptions.series) {
-      for (let row of this.data.mmr_Output) {
-        if (this.data.mmr_Output.indexOf(row) == this.chartMMROptions.series.indexOf(series)) {
+      for (let row of this.data.mrrOutput) {
+        if (this.data.mrrOutput.indexOf(row) == this.chartMMROptions.series.indexOf(series)) {
           for (let element of row) {
             // @ts-ignore
             for (let worker of this.workers) {
@@ -81,5 +81,4 @@ export class MmrChartComponent implements OnInit {
       }
     }
   }
-
 }

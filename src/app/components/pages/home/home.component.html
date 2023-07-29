@@ -81,7 +81,7 @@
                         <tr>
                           <th class="text-center" scope="col">Task ID</th>
                           <th class="text-center" scope="col">Worker Name</th>
-                          <th class="text-center" scope="col">Duration(seconds)</th>
+                          <th class="text-center" scope="col">Duration(Time Unit)</th>
                           <th class="text-center" scope="col">Action</th>
                         </tr>
                         </thead>
@@ -110,20 +110,22 @@
         </div>
       </div>
       <div class="row">
-        <button type="button" *ngIf="!checkingNumberOfJob() && !checkingNumberOfWorker()" (click)="sendData()">send
-          Data
+        <button type="button" *ngIf="!checkingNumberOfJob() && !checkingNumberOfWorker()" (click)="sendData()">Schedule
         </button>
       </div>
       <br>
       <br>
 
       <div *ngIf="isDataSent" id="chart">
+        <b>JSP</b>: Time: {{receivedData.jspEndTime}} time unit  and Execution Time: {{receivedData.jspImplementationTime}} Nano second
         <app-jsp-chart  [data]="receivedData" [workers]="workers" [jobs]="jobs" *ngIf="jobs!==null && workers !== null"></app-jsp-chart>
       </div>
       <div *ngIf="isDataSent" id="chartFCFS">
+        <b>FCFS</b>: Time: {{receivedData.fcfsEndTime}} time unit  and Execution Time: {{receivedData.fcfsImplementationTime}} Nano second
        <app-fcfs-chart  [data]="receivedData" [workers]="workers" [jobs]="jobs" *ngIf="jobs!==null && workers !== null"></app-fcfs-chart>
       </div>
       <div *ngIf="isDataSent" id="chartMMR">
+        <b>MRR</b>: Time: {{receivedData.mrrEndTime}} time unit  and Execution Time: {{receivedData.mmrImplementationTime}} Nano second
        <app-mmr-chart [data]="receivedData" [workers]="workers" [jobs]="jobs" *ngIf="jobs!==null && workers !== null"></app-mmr-chart>
       </div>
       <div class="row">
@@ -212,7 +214,7 @@
 
         <div class="mb-4 row">
           <div class="col-4">
-            <label for="task_duration" class="col-sm-4 col-form-label text-custom-blue">Duration (second)</label>
+            <label for="task_duration" class="col-sm-4 col-form-label text-custom-blue">Duration (Time Unit)</label>
           </div>
           <div class="col-sm-8">
             <input type="number" min="1" class="form-control form-control-custom" formControlName="task_duration"

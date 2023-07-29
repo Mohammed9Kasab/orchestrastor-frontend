@@ -43,7 +43,7 @@ export class FcfsChartComponent implements OnInit {
         }
       },
       fill: {
-        type: "gradient",
+        type: "solid",
         gradient: {
           shade: "light",
           type: "vertical",
@@ -68,8 +68,8 @@ export class FcfsChartComponent implements OnInit {
     }
     //FCFS CHART
     for (let series of this.chartFCFSOptions.series) {
-      for (let row of this.data.fcfs_Output) {
-        if (this.data.fcfs_Output.indexOf(row) == this.chartFCFSOptions.series.indexOf(series)) {
+      for (let row of this.data.fcfsOutput) {
+        if (this.data.fcfsOutput.indexOf(row) == this.chartFCFSOptions.series.indexOf(series)) {
           for (let element of row) {
             // @ts-ignore
             for (let worker of this.workers) {
@@ -82,6 +82,4 @@ export class FcfsChartComponent implements OnInit {
       }
     }
   }
-  
-
 }
