@@ -2,8 +2,6 @@ FROM node:alpine AS builder
 WORKDIR /app
 COPY . .
 RUN npm install --legacy-peer-deps
-CMD ["ng", "build"]
-COPY /dist .
 CMD ["ng", "serve"]
 
 FROM nginx:alpine
