@@ -38,7 +38,7 @@ export class JspChartComponent implements OnInit {
       }
     },
     fill: {
-      type: "gradient",
+      type: "solid",
       gradient: {
         shade: "light",
         type: "vertical",
@@ -57,13 +57,14 @@ export class JspChartComponent implements OnInit {
   }; }
 
   ngOnInit(): void {
+    console.log()
     for (let job of this.jobs) {
       this.chartJSPOptions.series.push({name: job.name, data: []})
     }
     //JSP CHART
     for (let series of this.chartJSPOptions.series) {
-      for (let row of this.data.jsp_Output) {
-        if (this.data.jsp_Output.indexOf(row) == this.chartJSPOptions.series.indexOf(series)) {
+      for (let row of this.data.jspOutput) {
+        if (this.data.jspOutput.indexOf(row) == this.chartJSPOptions.series.indexOf(series)) {
           for (let element of row) {
             // @ts-ignore
             for (let worker of this.workers) {
