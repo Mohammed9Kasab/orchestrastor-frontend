@@ -232,7 +232,6 @@
                   <img  src="{{currentAccount?.imageUrl != undefined && currentAccount?.imageUrl != '' ? currentAccount?.imageUrl : '/assets/images/user.jpeg'}}" class="rounded-circle" width="150"/>
                   <h5
                     class="card-title mt-2 text-light-dark">{{currentAccount?.firstName}} {{currentAccount?.lastName}}</h5>
-                  <h6 class="card-subtitle text-light-dark">Devista Consulting</h6>
                 </div>
                 <div class="credentials">
 
@@ -244,11 +243,6 @@
 
                   <small class=" text-custom-blue">Email address </small>
                   <h6 class="text-light-dark">{{currentAccount?.email}}</h6>
-
-                  <small class="text-custom-blue">Upload Picture</small><br/>
-                  <input type="file" >
-<!--                  <input type="file" (change)="updateProfilePicture($event)">-->
-
                 </div>
               </div>
             </div>
@@ -376,12 +370,6 @@
                     </div>
                   </div>
                   <br>
-                  <div class="row">
-                    <div class="col-12 mb-2 text-center">
-                      <label class="label fs-14 text-center text-custom-blue fw-500">Discount Code</label>
-                      <p style="font-size: 40px; font-weight: bold">{{discountCode}}</p>
-                    </div>
-                  </div>
                 </div>
               </div>
 
