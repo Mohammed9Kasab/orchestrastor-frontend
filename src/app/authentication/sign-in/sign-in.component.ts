@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AccountService} from "../service/account.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -10,9 +10,13 @@ import {Router} from "@angular/router";
 })
 export class SignInComponent implements OnInit {
 
-  constructor(private accountService: AccountService, private router: Router) {}
+  constructor(private accountService: AccountService, private router: Router, private readonly route: ActivatedRoute) {}
 
   ngOnInit(): void {
+
+    this.route.queryParams.pipe().subscribe(params => {if (params['key']) {
+       this.accountService.activateAccount(params['key']).subscribe();
+    }})
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
         this.router.navigate(['']);

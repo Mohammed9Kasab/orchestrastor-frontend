@@ -84,4 +84,9 @@ export class AccountService {
       this.router.navigateByUrl(previousUrl);
     }
   }
+
+  activateAccount(key: string) {
+  const url = this.applicationConfigService.getEndpointFor('activate');
+    return this.http.get( `${url}?key=${key}`);
+  }
 }
